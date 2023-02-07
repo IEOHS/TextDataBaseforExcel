@@ -3,7 +3,7 @@ date: 2023-02-08
 version: 0.0.0.9000
 ---
 
-# Text Data Base For VBA について
+# Text Data Base For Excel について
 
 このプログラムはExcel VBA上で動作する疑似データベース環境を構築します。
 
