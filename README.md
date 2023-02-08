@@ -21,6 +21,9 @@ version: 0.0.0.9000
 
 VBAによる操作は **SQL** 構文と似ているため、データベースを操作したことがあれば簡単に使うことができます。
 
+詳しくは、同封する `sample.xlsm` で操作方法を一式確認することができます。
+
+
 # 設定方法
 
 1. 以下のクラスモジュールをVBE画面でインポートしてください。
@@ -42,6 +45,8 @@ TSQL.WorkDir = "folder-full-path"
 ```
 
 または、**textSQL** クラスモジュールの起動時設定に直接書き込んでください。
+
+**HTMLmacro** も使用する場合、`Class_Initialize` を設定しておくほうが便利です。
 
 ```{vba}
 Private Sub Class_Initialize()
