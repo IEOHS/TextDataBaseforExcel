@@ -22,6 +22,18 @@ Sub sample(ByVal data_table_name As String)
     Dim TSQL As New textSQL
     Dim HTML As New HTMLmacro
     
+    '' 対象のデータを取得
+    num_row = ExcelDB___Get_FixDataRowNumber
+    If IsEmpty(num_row) Then Exit Sub
+    
+    '' 対象のキーを取得
+    Set dic = CreateObject("Scripting.Dictionary")
+    For Each nrow In num_row
+        With ThisWorkbook.Worksheets("データ操作")
+            dic.Add .Cells(nrow, 2).Value, .Cells(nrow, 2).Value
+        End With
+    Next
+    
     '' データテーブル取込み
     Set data = TSQL.SELECT_Table(data_table_name)
     
@@ -60,7 +72,7 @@ Public Sub PrintHTMLandOpenByBrowser(ByVal text As String)
     Dim TSQL As New textSQL
     
     '' ファイル保存場所
-    
+    TSQL.WorkDir = ThisWorkbook.path '' Class_Initializeを設定している場合は不要
     filename = TSQL.WorkDir & "\" & Format(Now(), "yyyyMMdd_HHmmSS") & ".html"
     
     '' htmlファイルを作成

@@ -57,8 +57,9 @@ End Function
 Public Function INSERT_Columns(ByVal table_name As String, ByVal table_column_types As Variant, _
                         ByVal table_column_names As Variant, ByVal set_insert_columns_number As Long) As Object
     '' INSERT table名 データ型配列、データ名配列、挿入位置の数字
-    Set INSERT_Columns = Insert_New_Column_To_DataTable(table_name, set_insert_columns_number, _
-                                            table_column_types, table_column_names)
+'    Set INSERT_Columns = Insert_New_Column_To_DataTable(table_name, set_insert_columns_number, _
+'                                            table_column_types, table_column_names)
+    Call SQL("INSERT", table_name, table_column_types, table_column_names, set_insert_columns_number)
             
 End Function
 Public Function UPDATE_Table(ByVal table_name As String, ByVal update_data As Variant)
@@ -230,6 +231,7 @@ Continue_Select:
         Case "INSERT"
             '' INSERT table名 データ型配列、データ名配列、挿入位置の数字
             Set SQL = Insert_New_Column_To_DataTable(sql_code(1), sql_code(4), sql_code(2), sql_code(3))
+            Call Make_Backup_File(sql_code(1))
             
         Case "UPDATE"
             '' UPDATE table名 dictionary名|配列名
@@ -1741,6 +1743,7 @@ Private Sub Set_New_Data_Base()
     
     Call Create_New_Folder("Backups")
 
+
 End Sub
 Private Function Search_Dimentions(ByVal dt As Variant) As Long
     On Error GoTo Continue
@@ -1829,11 +1832,6 @@ Continue:
     QuickSort = data
     
 End Function
-
-'Private Function wd() As String
-'    wd = working_dir
-'End Function
-
 Property Get WorkDir() As String
     WorkDir = working_dir
 End Property
@@ -1841,6 +1839,6 @@ Property Let WorkDir(ByVal working_directory As String)
     working_dir = working_directory & "\data"
 End Property
 
-Private Sub Class_Initialize()
-    working_dir = ThisWorkbook.Worksheets(1).Cells(1, 1).Value & "\data"
-End Sub
+'Private Sub Class_Initialize()
+'    working_dir = "set-working-directory" & "\data"
+'End Sub
