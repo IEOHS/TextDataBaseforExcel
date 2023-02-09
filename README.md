@@ -5,7 +5,7 @@ version: 0.0.0.9000
 
 # Text Data Base For Excel について
 
-このプログラムはExcel VBA上で動作する疑似データベース環境を構築します。
+このプログラムはExcel VBAだけで動作する疑似データベース環境を構築します。
 
 例えば、SQLiteではフォルダ上にバイナリファイルを作成し、SQL構文によりデータベース管理を行います。
 
@@ -33,14 +33,14 @@ VBAによる操作は **SQL** 構文と似ているため、データベース�
 
 2. 標準モジュールを追加し、クラスモジュールを使用できるようにグローバル変数として設定しておきます。
 
-```{vba}
+```vba
 Private TSQL As New textSQL
 Private HTML As New HTMLmacro
 ```
 
 3. データベースを作成する場所(path)を設定してください。
 
-```{vba}
+```vba
 TSQL.WorkDir = "folder-full-path"
 ```
 
@@ -48,7 +48,7 @@ TSQL.WorkDir = "folder-full-path"
 
 **HTMLmacro** も使用する場合、`Class_Initialize` を設定しておくほうが便利です。
 
-```{vba}
+```vba
 Private Sub Class_Initialize()
     working_dir = "folder-full-path" & "\data"
 End Sub
@@ -68,7 +68,7 @@ End Sub
 また、バックアップ作成用のフォルダ `Backups` が `data` フォルダ内に作成されます。
 
 
-```{vba}
+```vba
 TSQL.CREATE_DataBase
 TSQL.SQL("CREATE", "DATABASE")
 ```
@@ -87,7 +87,7 @@ TSQL.SQL("CREATE", "DATABASE")
 
 データ型で設定することができるのは、 **文字列,日付,時間,数値** の4つです。
 
-```{vba}
+```vba
 Call TSQL.SQL("CREATE", "TABLE", "テーブル名", _
         Array("データ型", ...), _
         Array("データ列名", ...))
@@ -104,7 +104,7 @@ Call TSQL.CREATE_DataTable("テーブル名", _
 
 最も簡単な方法は、Excelシート上に列名と登録するデータを準備し、VBAの `Range` で範囲指定をして取り込む方法です。
 
-```{vba}
+```vba
 dlist = Range(Cells(1, 1), Cells(6, 5)) 
 Call SQL("UPDATE", "テーブル名", dlist)
 Call TSQL.UPDATE_Table("テーブル名", dlist)
@@ -138,7 +138,7 @@ Dictionary型のデータは `dic2arr` 関数で2次元配列に変換される�
 
 
 
-```{vba}
+```vba
 Set dic = SQL("SELECT", "*", "テーブル名")
 Set dic = TSQL.SELECT_Table("テーブル名")
 
@@ -184,7 +184,7 @@ Range(Cells(1, 10), Cells(UBound(data, 1), 10 + UBound(data, 2))) = TSQL.dic2arr
 
 Excelのシート上でデータの修正を行った場合、 `Range` で列名とデータを範囲指定で取得しで処理を行うことができます。(データ型を同じ配列に含める必要はありません。)
 
-```{vba}
+```vba
 data = Range(Cells(1, 1), Cells(6, 5))
 Call SQL("UPDATE", "テーブル名", data)
 Call TSQL.UPDATE_Table("テーブル名", data)
@@ -198,7 +198,7 @@ Call TSQL.UPDATE_Table("テーブル名", data)
 
 列の追加には列名と併せてデータ型の指定が必要です。
 
-```{vba}
+```vba
 Call SQL("INSERT", "テーブル名", Array("データ型の指定"), Array("データ列名の指定"), 挿入する列番号(Lng))
 Call TSQL.INSERT_Columns("テーブル名", Array("データ型の指定"), Array("データ列名の指定"), 挿入する列番号(Lng))
 ```
@@ -211,7 +211,7 @@ Call TSQL.INSERT_Columns("テーブル名", Array("データ型の指定"), Arra
 
 テーブル内全てのデータを削除する場合は、列名に **"*"** を指定します。
 
-```{vba}
+```vba
 Call TSQL.SQL("DELETE", "テーブル名", Array("削除データキー名", ...))
 Call DELETE_Items("テーブル名", Array("削除データキー名", ...))
 ```
@@ -220,7 +220,7 @@ Call DELETE_Items("テーブル名", Array("削除データキー名", ...))
 
 テーブルを削除する場合は、 `DROP` 構文を使います。
 
-```{vba}
+```vba
 Call TSQL.SQL("DROP", "テーブル名")
 Call TSQL.DROP_Table("テーブル名")
 ```
@@ -230,31 +230,31 @@ Call TSQL.DROP_Table("テーブル名")
 
 ### データベース内にフォルダーを作成
 
-```{vba}
+```vba
 Call TSQL.MakeDirectory("フォルダ名")
 ```
 
 ### テーブル名一覧取得
 
-```{vba}
+```vba
 MsgBox Join(TSQL.tables, VbCrLf))
 ```
 
 ### テーブル内の列名取得
 
-```{vba}
+```vba
 MsgBox Join(TSQL.table_ColNames("テーブル名"))
 ```
 
 ### テーブル内のデータ数取得
 
-```{vba}
+```vba
 MsgBox Join(TSQL.table_Count("テーブル名"))
 ```
 
 ### Dictionary型データを横に結合
 
-```{vba}
+```vba
 Set dic1 = TSQL.SELECT_Table("テーブル名1")
 Set dic2 = TSQL.SELECT_Table("テーブル名2")
 set TSQL.cbind(dic1, dic2)
@@ -262,7 +262,7 @@ set TSQL.cbind(dic1, dic2)
 
 ### Dictionary型データを縦に結合
 
-```{vba}
+```vba
 Set dic1 = TSQL.SELECT_Table("テーブル名1")
 Set dic2 = TSQL.SELECT_Table("テーブル名2")
 set TSQL.rbind(dic1, dic2)
@@ -274,20 +274,20 @@ set TSQL.rbind(dic1, dic2)
 
 作成されるデータは、 **日付_時刻_ランダム値** のようになっています。
 
-```{vba}
+```vba
 num = TSQL.runif(生成するランダム値の数(Lng), 最小値(Lng), 最大値(Lng))
 ```
 
 ### Dictionary型データを2次元配列に変換
 
-```{vba}
+```vba
 Set dic1 = TSQL.SELECT_Table("テーブル名1")
 data = TSQL.arr2dic(dic1)
 ```
 
 ### 2次元配列をDictionary型に変換
 
-```{vba}
+```vba
 data = Range(Cells(1, 1), Cells(5, 5))
 set dic = TSQL.arr2dic(data)
 ```
@@ -296,7 +296,7 @@ set dic = TSQL.arr2dic(data)
 
 `SELECT` 構文中の `WHERE` と同じ働きをします。
 
-```{vba}
+```vba
 Set dic1 = TSQL.SELECT_Table("テーブル名1")
 Set Dic2 = TSQL.filter4dic(dic1, "列名1>=100")
 ```
@@ -305,7 +305,7 @@ Set Dic2 = TSQL.filter4dic(dic1, "列名1>=100")
 
 `SELECT` 構文中でテーブルからデータを取得する際、取得する列名を設定することと同じ働きをします。
 
-```{vba}
+```vba
 Set dic1 = TSQL.SELECT_Table("テーブル名1")
 Set Dic2 = TSQL.select4dic(dic1, Array("列名", ...))
 ```
@@ -328,7 +328,7 @@ Set Dic2 = TSQL.select4dic(dic1, Array("列名", ...))
 
 通常のHTMLと同じように、自由にフォーマットを作成することができますが、手っ取り早くデータを確認する場合は、 `TSQL.SELECT_Table()` で取り込んだDictionary型データを、 `.table()` の引数に指定する方法です。
 
-```{vba}
+```vba
 Set dic = TSQL.SELECT_Table("テーブル名")
 body = HTML.table(dic, "wide"|"long")
 text = HTML.HTML("title", body)
@@ -337,7 +337,7 @@ Call HTML.PrintHTMLandOpenByBrowser(text)
 
 以下に簡単なサンプルを示します。
 
-```{vba}
+```vba
 Private TSQL As New textSQL
 Private HTML As New HTMLmacro
 Sub sample(ByVal data_table_name As String)
